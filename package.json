@@ -1,0 +1,26 @@
+{
+  "name": "CopyList",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "clipboardy": "^2.3.0"
+  },
+  "devDependencies": {
+    "electron": "^22.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.yourname.my-electron-app",
+    "mac": {
+      "target": "dmg"
+    }
+  },
+  "author": {
+    "name": "MD. Humayun Kabir",
+    "email": "kabir@coderex.co"
+  }
+}
