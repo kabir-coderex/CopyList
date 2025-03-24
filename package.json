@@ -22,5 +22,10 @@
   "author": {
     "name": "MD. Humayun Kabir",
     "email": "kabir@coderex.co"
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "kabir-coderex",
+    "repo": "CopyList"
   }
 }
