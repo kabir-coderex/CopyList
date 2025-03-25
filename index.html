@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clipboard History</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <h1><span style="color: #1b3649">Copy List</span> - Clipboard Manager</h1>
-  <button id="clear-btn">Clear Clipboard</button>
-  <div id="clipboard-history">
-    <ul id="clipboard-list">
-      <!-- Clipboard items will go here -->
-    </ul>
-  </div>
-  <script src="renderer.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clipboard History</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1><span style="color: #1b3649">Copy List</span> - Clipboard Manager</h1>
+    <button id="clear-btn">Clear Clipboard</button>
+    <div id="clipboard-history">
+      <ul id="clipboard-list">
+        <!-- Clipboard items will go here -->
+      </ul>
+      <div id="pagination"></div>
+    </div>
+    <script src="renderer.js"></script>
+  </body>
 </html>

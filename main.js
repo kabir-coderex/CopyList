@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, globalShortcut } = require('electron');
+const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -15,11 +15,41 @@ function createWindow() {
       enableRemoteModule: true,
     },
     icon: path.join(__dirname, 'assets/icons/copy_list.icns'),
-    frame: false, // Remove window frame
-    resizable: false,
+    frame: true, // Allow window frame
+    resizable: true, // Allow window resizing
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
+
+  // Minimize button functionality
+  ipcMain.on('minimize', () => {
+    mainWindow.minimize();
+  });
+
+  // Maximize/Fullscreen button functionality
+  ipcMain.on('fullscreen', () => {
+    if (mainWindow.isMaximized()) {
+      mainWindow.restore();
+    } else {
+      mainWindow.maximize();
+    }
+  });
+
+  // Quit/Hide button functionality
+  ipcMain.on('quit', () => {
+    app.quit();
+  });
+
+  // Handle window movement
+  ipcMain.on('move-window', (event, { x, y }) => {
+    const bounds = mainWindow.getBounds();
+    mainWindow.setBounds({
+      x: bounds.x + x,
+      y: bounds.y + y,
+      width: bounds.width,
+      height: bounds.height
+    });
+  });
 }
 
 app.whenReady().then(() => {
@@ -63,7 +93,7 @@ app.whenReady().then(() => {
   createWindow();
 
   // Register hotkey (Ctrl + Shift + V)
-  globalShortcut.register('Control+Shift+V', () => {
+  globalShortcut.register('Control+V', () => {
     if (mainWindow.isVisible()) {
       mainWindow.hide();
     } else {

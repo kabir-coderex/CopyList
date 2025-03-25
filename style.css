@@ -63,6 +63,12 @@ button {
     color: white;
 }
 
+#clear-btn {
+    border: 2px solid;
+    color: tomato;
+    background: #FFF;
+}
+
 .success-message {
     background-color: #4CAF50;
     color: white;
