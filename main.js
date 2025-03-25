@@ -48,7 +48,8 @@ function createWindow() {
 
   // Quit/Hide button functionality
   ipcMain.on('quit', () => {
-    app.quit();
+    app.isQuiting = true;
+    app.quit(); // Quit the app if 'Quit' is selected from tray
   });
 
   // Handle window movement
@@ -81,7 +82,11 @@ app.whenReady().then(() => {
     { label: 'Show', click: () => mainWindow.show() },
     { label: 'Hide', click: () => mainWindow.hide() },
     { type: 'separator' },
-    { label: 'Quit', click: () => app.quit() }
+    { label: 'Quit', click: () => {
+        app.isQuiting = true;
+        app.quit(); // Quit the app if 'Quit' is selected from tray
+      } 
+    }
   ]);
 
   tray.setToolTip('Copy List App');
