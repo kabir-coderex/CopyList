@@ -1,5 +1,6 @@
 {
-  "name": "CopyList",
+  "name": "copy-list",
+  "productName": "Copy List",
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
@@ -14,9 +15,12 @@
     "electron-builder": "^25.1.8"
   },
   "build": {
-    "appId": "com.yourname.my-electron-app",
+    "appId": "com.humayun.copylist",
+    "productName": "Copy List",
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "identity": "Developer ID Application: Md. Humayun Kabir",
+      "icon": "assets/icons/copy_list.icns"
     }
   },
   "author": {

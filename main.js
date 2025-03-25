@@ -12,6 +12,7 @@ function createWindow() {
       contextIsolation: false,
       enableRemoteModule: true,
     },
+    icon: path.join(__dirname, 'assets/icons/copy_list.icns'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
