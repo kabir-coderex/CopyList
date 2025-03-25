@@ -22,6 +22,14 @@ function createWindow() {
     title: 'Copy List App',
   });
 
+  // Handle the close event to hide the window instead of quitting the app
+  mainWindow.on('close', (event) => {
+    if (!app.isQuiting) {
+      event.preventDefault();
+      mainWindow.hide(); // Hide the window when close is clicked
+    }
+  });
+
   mainWindow.loadURL(`file://${__dirname}/index.html`);
 
   // Minimize button functionality
