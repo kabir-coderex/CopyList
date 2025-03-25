@@ -1,7 +1,7 @@
 {
   "name": "copy-list",
   "productName": "Copy List",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -19,7 +19,7 @@
     "productName": "Copy List",
     "mac": {
       "target": "dmg",
-      "identity": "Developer ID Application: Md. Humayun Kabir",
+      "identity": null,
       "icon": "assets/icons/copy_list.icns"
     }
   },
