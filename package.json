@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac --universal"
   },
   "dependencies": {
     "clipboardy": "^2.3.0"
@@ -14,10 +15,10 @@
     "electron": "^22.0.0",
     "electron-builder": "^25.1.8"
   },
-  "build": {
-    "appId": "com.humayun.copylist",
-    "productName": "Copy List",
-    "mac": {
+ "build": {
+  "appId": "com.humayun.copylist",
+  "productName": "Copy List",
+  "mac": {
       "target": "dmg",
       "identity": null,
       "icon": "assets/icons/copy_list.icns"

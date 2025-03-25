@@ -3,26 +3,28 @@ const clipboardy = require('clipboardy');
 
 // Array to store clipboard history
 let clipboardHistory = [];
+let currentPage = 1;
+const itemsPerPage = 5; // Number of items per page
 
 // Function to update the clipboard history UI
 function updateClipboardList() {
   const list = document.getElementById('clipboard-list');
   list.innerHTML = ''; // Clear existing list
 
-  clipboardHistory.forEach((item, index) => {
+  // Get the items for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const pageItems = clipboardHistory.slice(startIndex, endIndex);
+
+  pageItems.forEach((item, index) => {
     const li = document.createElement('li');
+    li.classList.add('clipboard-item');
     li.textContent = item;
 
     // Create a copy button
     const copyBtn = document.createElement('button');
     copyBtn.textContent = 'Copy';
-    copyBtn.style.backgroundColor = 'green'; // Green color for copy button
-    copyBtn.style.color = 'white';
-    copyBtn.style.padding = '8px 16px';
-    copyBtn.style.margin = '5px';
-    copyBtn.style.border = 'none';
-    copyBtn.style.borderRadius = '5px';
-    copyBtn.style.cursor = 'pointer';
+    copyBtn.classList.add('copy-btn');
     copyBtn.onclick = () => {
       clipboard.writeText(item); // Paste the selected item
       showSuccessMessage('Copied!');
@@ -31,13 +33,7 @@ function updateClipboardList() {
     // Create a delete button
     const deleteBtn = document.createElement('button');
     deleteBtn.textContent = 'Delete';
-    deleteBtn.style.backgroundColor = 'red'; // Red color for delete button
-    deleteBtn.style.color = 'white';
-    deleteBtn.style.padding = '8px 16px';
-    deleteBtn.style.margin = '5px';
-    deleteBtn.style.border = 'none';
-    deleteBtn.style.borderRadius = '5px';
-    deleteBtn.style.cursor = 'pointer';
+    deleteBtn.classList.add('delete-btn');
     deleteBtn.onclick = () => {
       const confirmDelete = confirm('Are you sure you want to delete this item?');
       if (confirmDelete) {
@@ -53,23 +49,52 @@ function updateClipboardList() {
     // Add to the list in the UI
     list.appendChild(li);
   });
+
+  updatePagination();
 }
 
 // Function to show success message when an item is copied
 function showSuccessMessage(message) {
   const successMessage = document.createElement('div');
   successMessage.textContent = message;
-  successMessage.style.backgroundColor = 'green';
-  successMessage.style.color = 'white';
-  successMessage.style.padding = '10px';
-  successMessage.style.marginTop = '10px';
-  successMessage.style.borderRadius = '5px';
+  successMessage.classList.add('success-message');
   document.body.appendChild(successMessage);
 
   // Hide the success message after 2 seconds
   setTimeout(() => {
     successMessage.style.display = 'none';
   }, 2000);
+}
+
+// Pagination control
+function updatePagination() {
+  const pagination = document.getElementById('pagination');
+  pagination.innerHTML = ''; // Clear existing pagination
+
+  const totalPages = Math.ceil(clipboardHistory.length / itemsPerPage);
+
+  // Previous page button
+  const prevBtn = document.createElement('button');
+  prevBtn.textContent = 'Previous';
+  prevBtn.classList.add('pagination-btn');
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.onclick = () => {
+    currentPage--;
+    updateClipboardList();
+  };
+
+  // Next page button
+  const nextBtn = document.createElement('button');
+  nextBtn.textContent = 'Next';
+  nextBtn.classList.add('pagination-btn');
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.onclick = () => {
+    currentPage++;
+    updateClipboardList();
+  };
+
+  pagination.appendChild(prevBtn);
+  pagination.appendChild(nextBtn);
 }
 
 // Handle the "Clear Clipboard" button click
@@ -90,7 +115,7 @@ setInterval(() => {
   
   // Only add to the history if it's new or different and not already in the list
   if (currentText !== '' && !clipboardHistory.includes(currentText)) {
-    clipboardHistory.push(currentText);
+    clipboardHistory.unshift(currentText); // Add new item at the top
     updateClipboardList();
   }
 }, 1000); // Check every second

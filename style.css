@@ -1,0 +1,96 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fa;
+    margin: 0;
+    padding: 20px;
+}
+
+#clipboard-history {
+    margin-top: 20px;
+}
+#clipboard-list {
+    list-style-type: none;
+    padding: 0;
+}
+#clipboard-list li {
+    padding: 5px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+}
+#clipboard-list li:hover {
+    background-color: #f1f1f1;
+}
+button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+  
+ul {
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.clipboard-item {
+    background-color: #fff;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.copy-btn {
+    background-color: #4CAF50;
+    color: white;
+    margin-left: auto;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.success-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+/* Pagination Styles */
+#pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination-btn {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.pagination-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
