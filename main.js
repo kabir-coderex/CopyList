@@ -17,6 +17,9 @@ function createWindow() {
     icon: path.join(__dirname, 'assets/icons/copy_list.icns'),
     frame: true, // Allow window frame
     resizable: true, // Allow window resizing
+    maximizable: false, // Prevent maximize button
+    fullscreenable: true, // Prevent fullscreen button
+    title: 'Copy List App',
   });
 
   mainWindow.loadURL(`file://${__dirname}/index.html`);
