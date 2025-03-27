@@ -1,7 +1,7 @@
 {
   "name": "copy-list",
   "productName": "Copy List",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
