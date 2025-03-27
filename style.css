@@ -17,15 +17,9 @@ body {
     padding: 5px;
     cursor: pointer;
     border-bottom: 1px solid #ddd;
-}
-#clipboard-list li:hover {
-    background-color: #f1f1f1;
-}
-button {
-    margin-left: 10px;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 5px;
+    max-height: calc(100vh - 140px);
+    overflow: auto;
+    overflow-x: hidden;
 }
   
 ul {
@@ -33,40 +27,78 @@ ul {
     list-style-type: none;
 }
 
+/* General styling for clipboard items */
 .clipboard-item {
-    background-color: #fff;
-    margin: 10px 0;
-    padding: 15px;
+    background-color: #1e1e1e;  /* Dark theme */
+    color: #ffffff;
+    font-family: "Courier New", monospace;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    max-width: 100%;
+    margin: 10px 0;
+}
+
+/* Sticky header */
+.clipboard-item-header {
+    background-color: #282c34;
+    padding: 8px 10px;
+    font-weight: bold;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transform: translate(-8px, -5px);
+    width: 100%;
 }
 
-button {
-    padding: 10px 15px;
-    margin-left: 10px;
-    border: none;
+/* Code block styling */
+.clipboard-content {
+    background-color: #1e1e1e;
+    padding: 10px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     border-radius: 5px;
+}
+
+/* Button styling */
+.copy-btn, .delete-btn {
+    background: none;
+    border: none;
     cursor: pointer;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 5px;
 }
 
 .copy-btn {
-    background-color: #4CAF50;
-    color: white;
     margin-left: auto;
 }
 
-.delete-btn {
-    background-color: #f44336;
-    color: white;
+.copy-btn:hover, .delete-btn:hover {
+    color: #61dafb;
+}
+
+/* Icon Styling */
+.copy-btn i, .delete-btn i {
+    font-size: 16px;
 }
 
 #clear-btn {
     border: 2px solid;
     color: tomato;
     background: #FFF;
+    padding: 10px 15px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .success-message {
@@ -99,4 +131,15 @@ button {
 .pagination-btn:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
+}
+
+pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 5px;
+    overflow: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: "Courier New", monospace;
+    max-width: 100%; 
 }
