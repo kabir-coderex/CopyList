@@ -5,7 +5,7 @@ CopyList is a lightweight clipboard manager built with **Electron.js**. It allow
 ## Features
 
 ✅ **Tray (Menu Bar) App** – Stays in the top bar, hidden from the Dock  
-✅ **Global Shortcut** – Open with `Ctrl + Shift + V`  
+✅ **Global Shortcut** – Open with `Ctrl + V`  
 ✅ **Auto-Launch on Login** – Starts automatically when macOS boots  
 ✅ **Quick Toggle** – Left-click the tray icon to show/hide  
 ✅ **Context Menu** – Right-click the tray icon for options  
@@ -20,7 +20,7 @@ CopyList is a lightweight clipboard manager built with **Electron.js**. It allow
 
 - **Left-click the tray icon** → Opens the clipboard manager.
 - **Right-click the tray icon** → Shows options (`Show`, `Hide`, `Quit`).
-- **Use `Ctrl + Shift + V`** → Opens the app from anywhere.
+- **Use `Ctrl + V`** → Opens the app from anywhere.
 
 ## Basic troubleshooting
 - If you see this message `“CopyList” is damaged and can’t be opened. You should move it to the Bin.` → Then open your terminal and run this command,
