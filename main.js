@@ -1,5 +1,7 @@
 const { app, BrowserWindow, Tray, Menu, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
+const { checkForUpdates } = require("./updateManager");
+
 
 let mainWindow;
 let tray;
@@ -82,6 +84,7 @@ app.whenReady().then(() => {
     { label: 'Show', click: () => mainWindow.show() },
     { label: 'Hide', click: () => mainWindow.hide() },
     { type: 'separator' },
+    { label: "Update Copy List", click: () => checkForUpdates(tray) },
     { label: 'Quit', click: () => {
         app.isQuiting = true;
         app.quit(); // Quit the app if 'Quit' is selected from tray
