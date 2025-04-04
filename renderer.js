@@ -6,17 +6,6 @@ let clipboardHistory = [];
 let currentPage = 1;
 const itemsPerPage = 5; // Number of items per page
 
-// Function to determine if the text is code based on patterns
-function isCode(text) {
-  // Check if the text has multiple lines and starts with indentation (which is typical for code)
-  const lines = text.split('\n');
-  const hasIndentedLine = lines.some(line => /^\s+/.test(line)); // Line starts with spaces/tabs
-  const hasCodePattern = /function\s+\w+\s*\(.*\)\s*\{/.test(text) || /class\s+\w+/.test(text); // Simple regex patterns for functions or classes
-
-  // Combine both conditions: either indented lines or recognizable code patterns
-  return hasIndentedLine || hasCodePattern;
-}
-
 // Function to update the clipboard history UI with code styling
 function isCodeSnippet(text) {
   // Check if the text has multiple lines and starts with indentation (which is typical for code)
@@ -88,6 +77,12 @@ function updateClipboardList() {
       li.appendChild(header);
       li.appendChild(content);
       list.appendChild(li);
+      
+      // Add click event to copy the item when clicked
+      li.onclick = () => {
+        clipboard.writeText(item);
+        showSuccessMessage('Copied!');
+      };
   });
 
   updatePagination();
@@ -114,6 +109,13 @@ function updatePagination() {
 
   const totalPages = Math.ceil(clipboardHistory.length / itemsPerPage);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
   // Previous page button
   const prevBtn = document.createElement('button');
   prevBtn.textContent = 'Previous';
@@ -122,6 +124,7 @@ function updatePagination() {
   prevBtn.onclick = () => {
     currentPage--;
     updateClipboardList();
+    scrollToTop();
   };
 
   // Next page button
@@ -132,6 +135,7 @@ function updatePagination() {
   nextBtn.onclick = () => {
     currentPage++;
     updateClipboardList();
+    scrollToTop();
   };
 
   pagination.appendChild(prevBtn);
@@ -159,4 +163,4 @@ setInterval(() => {
     clipboardHistory.unshift(currentText); // Add new item at the top
     updateClipboardList();
   }
-}, 1000); // Check every second
+}, 100); // Check every second
