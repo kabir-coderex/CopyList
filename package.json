@@ -1,7 +1,7 @@
 {
   "name": "copy-list",
   "productName": "Copy List",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -15,11 +15,30 @@
     "electron": "^22.0.0",
     "electron-builder": "^25.1.8"
   },
- "build": {
-  "appId": "com.humayun.copylist",
-  "productName": "Copy List",
-  "mac": {
-      "target": "dmg",
+  "build": {
+    "asar": true,
+    "files": [
+      "**/*",
+      "!**/*.md",
+      "!**/*.spec.js",
+      "!**/test/*",
+      "!**/dev/*"
+    ],
+    "extraResources": [
+      {
+        "from": "assets",
+        "to": "assets",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "appId": "com.humayun.copylist",
+    "mac": {
+      "target": [
+        "dmg",
+        "pkg"
+      ],
       "identity": null,
       "icon": "assets/icons/copy_list.icns"
     }
