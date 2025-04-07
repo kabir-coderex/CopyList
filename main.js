@@ -64,6 +64,13 @@ function createWindow() {
       height: bounds.height
     });
   });
+
+  // Hide the window when it loses focus (click outside)
+  mainWindow.on('blur', () => {
+    if (!mainWindow.isDestroyed()) {
+      mainWindow.hide();
+    }
+  });
 }
 
 app.whenReady().then(() => {
@@ -111,7 +118,7 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  // Register hotkey (Ctrl + Shift + V)
+  // Register hotkey (Ctrl + V)
   globalShortcut.register('Control+V', () => {
     if (mainWindow.isVisible()) {
       mainWindow.hide();
