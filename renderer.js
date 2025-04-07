@@ -5,6 +5,7 @@ const clipboardy = require('clipboardy');
 let clipboardHistory = [];
 let currentPage = 1;
 const itemsPerPage = 5; // Number of items per page
+let isPaginationEnabled = true; // Pagination toggle state
 
 // Function to update the clipboard history UI with code styling
 function isCodeSnippet(text) {
@@ -13,7 +14,6 @@ function isCodeSnippet(text) {
   const hasIndentedLine = lines.some(line => /^\s+/.test(line)); // Line starts with spaces/tabs
   const hasCodePattern = /function\s+\w+\s*\(.*\)\s*\{/.test(text) || /class\s+\w+/.test(text); // Simple regex patterns for functions or classes
 
-  // Combine both conditions: either indented lines or recognizable code patterns
   return hasIndentedLine || hasCodePattern;
 }
 
@@ -21,22 +21,19 @@ function updateClipboardList() {
   const list = document.getElementById('clipboard-list');
   list.innerHTML = '';
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const pageItems = clipboardHistory.slice(startIndex, endIndex);
+  const pageItems = isPaginationEnabled 
+    ? clipboardHistory.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+    : clipboardHistory; // Show all items if pagination is disabled
 
   pageItems.forEach((item, index) => {
       const li = document.createElement('li');
       li.classList.add('clipboard-item');
 
       const isCode = isCodeSnippet(item);
-
-      // Create header with buttons
       const header = document.createElement('div');
       header.classList.add('clipboard-item-header');
       header.innerHTML = `<span>${isCode ? "Code Snippet" : "Copied Item"}</span>`;
 
-      // Copy button with SVG icon
       const copyBtn = document.createElement('button');
       copyBtn.classList.add('copy-btn');
       copyBtn.innerHTML = `
@@ -49,7 +46,6 @@ function updateClipboardList() {
           showSuccessMessage('Copied!');
       };
 
-      // Delete button with SVG icon
       const deleteBtn = document.createElement('button');
       deleteBtn.classList.add('delete-btn');
       deleteBtn.innerHTML = `
@@ -64,21 +60,17 @@ function updateClipboardList() {
           }
       };
 
-      // Append buttons to header
       header.appendChild(copyBtn);
       header.appendChild(deleteBtn);
 
-      // Create content block
       const content = document.createElement(isCode ? 'pre' : 'p');
       content.classList.add('clipboard-content');
       content.textContent = item;
 
-      // Append to list item
       li.appendChild(header);
       li.appendChild(content);
       list.appendChild(li);
       
-      // Add click event to copy the item when clicked
       li.onclick = () => {
         clipboard.writeText(item);
         showSuccessMessage('Copied!');
@@ -87,7 +79,6 @@ function updateClipboardList() {
 
   updatePagination();
 }
-
 
 // Function to show success message when an item is copied
 function showSuccessMessage(message) {
@@ -106,6 +97,13 @@ function showSuccessMessage(message) {
 function updatePagination() {
   const pagination = document.getElementById('pagination');
   pagination.innerHTML = ''; // Clear existing pagination
+
+  if (!isPaginationEnabled) {
+    pagination.style.display = 'none'; // Hide pagination controls if not enabled
+    return;
+  }else {
+    pagination.style.display = 'flex'; // Show pagination controls
+  }
 
   const totalPages = Math.ceil(clipboardHistory.length / itemsPerPage);
 
@@ -142,6 +140,13 @@ function updatePagination() {
   pagination.appendChild(nextBtn);
 }
 
+// Pagination toggle button logic
+document.getElementById('pagination-toggle-btn').addEventListener('change', (e) => {
+  isPaginationEnabled = e.target.checked;
+  currentPage = 1; // Reset to the first page when pagination is re-enabled
+  updateClipboardList(); // Update the list based on the new pagination setting
+});
+
 // Handle the "Clear Clipboard" button click
 const clearBtn = document.getElementById('clear-btn');
 clearBtn.addEventListener('click', () => {
@@ -160,7 +165,8 @@ setInterval(() => {
   
   // Only add to the history if it's new or different and not already in the list
   if (currentText !== '' && !clipboardHistory.includes(currentText)) {
-    clipboardHistory.unshift(currentText); // Add new item at the top
+    clipboardHistory.unshift(currentText); // Add to the top of the list
     updateClipboardList();
   }
-}, 100); // Check every second
+}, 100);
+
