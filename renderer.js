@@ -53,10 +53,28 @@ function updateClipboardList() {
               <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3C9 2.44772 9.44772 2 10 2H14C14.5523 2 15 2.44772 15 3V4H19C19.5523 4 20 4.44772 20 5C20 5.55228 19.5523 6 19 6H18.4656L17.4376 20.2044C17.3747 21.0813 16.6425 21.75 15.7636 21.75H8.23637C7.3575 21.75 6.62532 21.0813 6.5624 20.2044L5.53444 6H5C4.44772 6 4 5.55228 4 5C4 4.44772 4.44772 4 5 4H9V3ZM7.53444 6L8.52298 20H15.477L16.4656 6H7.53444Z" fill="currentColor"></path>
           </svg>
       `;
-      deleteBtn.onclick = () => {
+      deleteBtn.onclick = (e) => {
           if (confirm('Delete this item?')) {
+              e.stopPropagation(); // Prevent the click event from propagating to the li
+              // Remove the item from the clipboard history
+              const index = clipboardHistory.indexOf(item);
+              if (index === -1) {
+                  console.error('Item not found in clipboard history:', item);
+                  return;
+              }
+
+              if(0 === index) clipboard.writeText(''); // Clear the clipboard if the first item is deleted
+              // Remove the item from the array
               clipboardHistory.splice(index, 1);
-              updateClipboardList();
+
+
+
+              // Update the UI
+              updateClipboardList(); // Re-render the list
+              // Show a confirmation message
+              alert('Item deleted successfully!');
+              // Log the item being deleted
+              console.log('Deleting item:', item);
           }
       };
 
