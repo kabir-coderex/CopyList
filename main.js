@@ -119,7 +119,7 @@ app.whenReady().then(() => {
   createWindow();
 
   // Register hotkey (Ctrl + V)
-  globalShortcut.register('Control+V', () => {
+  globalShortcut.register('Control+G', () => {
     if (mainWindow.isVisible()) {
       mainWindow.hide();
     } else {

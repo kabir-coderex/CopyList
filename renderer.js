@@ -39,57 +39,7 @@ setTheme(currentTheme)
 
 // Load items from localStorage
 function loadItems() {
-  const savedItems = localStorage.getItem("clipboardItems")
-  if (savedItems) {
-    clipboardCopiedItems = JSON.parse(savedItems)
-  } else {
-    // Sample items for demonstration
-    clipboardCopiedItems = [
-      {
-        id: "1",
-        content: "https://example.com/important-link",
-        isPinned: true,
-        timestamp: Date.now() - 3600000,
-      },
-      {
-        id: "2",
-        content: "Remember to check the documentation",
-        isPinned: false,
-        timestamp: Date.now() - 7200000,
-      },
-      {
-        id: "3",
-        content: "Meeting notes: Discuss project timeline and deliverables",
-        isPinned: false,
-        timestamp: Date.now() - 10800000,
-      },
-      {
-        id: "4",
-        content: "https://github.com/vercel/next.js",
-        isPinned: true,
-        timestamp: Date.now() - 14400000,
-      },
-      {
-        id: "5",
-        content: "Don't forget to update the dependencies",
-        isPinned: false,
-        timestamp: Date.now() - 18000000,
-      },
-      {
-        id: "6",
-        content: "Client meeting at 3 PM tomorrow",
-        isPinned: false,
-        timestamp: Date.now() - 21600000,
-      },
-      {
-        id: "7",
-        content: "https://tailwindcss.com/docs",
-        isPinned: false,
-        timestamp: Date.now() - 25200000,
-      },
-    ]
-    saveItems()
-  }
+    
 }
 
 // Save items to localStorage
@@ -362,97 +312,22 @@ nextPageBtn.addEventListener("click", () => {
   }
 })
 
-function updateClipboardList() {
-  const list = document.getElementById('clipboard-list');
-  list.innerHTML = '';
-
-  const pageItems = isPaginationEnabled 
-    ? clipboardHistory.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-    : clipboardHistory; // Show all items if pagination is disabled
-
-  pageItems.forEach((item, index) => {
-      const li = document.createElement('li');
-      li.classList.add('clipboard-item');
-
-      const isCode = isCodeSnippet(item);
-      const header = document.createElement('div');
-      header.classList.add('clipboard-item-header');
-      header.innerHTML = `<span>${isCode ? "Code Snippet" : "Copied Item"}</span>`;
-
-      const copyBtn = document.createElement('button');
-      copyBtn.classList.add('copy-btn');
-      copyBtn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path>
-          </svg>
-      `;
-      copyBtn.onclick = () => {
-          clipboard.writeText(item);
-          showSuccessMessage('Copied!');
-      };
-
-      const deleteBtn = document.createElement('button');
-      deleteBtn.classList.add('delete-btn');
-      deleteBtn.innerHTML = `
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path fill-rule="evenodd" clip-rule="evenodd" d="M9 3C9 2.44772 9.44772 2 10 2H14C14.5523 2 15 2.44772 15 3V4H19C19.5523 4 20 4.44772 20 5C20 5.55228 19.5523 6 19 6H18.4656L17.4376 20.2044C17.3747 21.0813 16.6425 21.75 15.7636 21.75H8.23637C7.3575 21.75 6.62532 21.0813 6.5624 20.2044L5.53444 6H5C4.44772 6 4 5.55228 4 5C4 4.44772 4.44772 4 5 4H9V3ZM7.53444 6L8.52298 20H15.477L16.4656 6H7.53444Z" fill="currentColor"></path>
-          </svg>
-      `;
-      deleteBtn.onclick = (e) => {
-          if (confirm('Delete this item?')) {
-              e.stopPropagation(); // Prevent the click event from propagating to the li
-              // Remove the item from the clipboard history
-              const index = clipboardHistory.indexOf(item);
-              if (index === -1) {
-                  console.error('Item not found in clipboard history:', item);
-                  return;
-              }
-
-              if(0 === index) clipboard.writeText(''); // Clear the clipboard if the first item is deleted
-              // Remove the item from the array
-              clipboardHistory.splice(index, 1);
-
-
-
-              // Update the UI
-              updateClipboardList(); // Re-render the list
-              // Show a confirmation message
-              alert('Item deleted successfully!');
-              // Log the item being deleted
-              console.log('Deleting item:', item);
-          }
-      };
-
-      header.appendChild(copyBtn);
-      header.appendChild(deleteBtn);
-
-      const content = document.createElement(isCode ? 'pre' : 'p');
-      content.classList.add('clipboard-content');
-      content.textContent = item;
-
-      li.appendChild(header);
-      li.appendChild(content);
-      list.appendChild(li);
-      
-      li.onclick = () => {
-        clipboard.writeText(item);
-        showSuccessMessage('Copied!');
-      };
-  });
-
-  updatePagination();
-}
-
-// Initialize
-loadItems()
-renderItems()
+let lastText = '';
 
 setInterval(() => {
   const currentText = clipboard.readText();
-  
-  // Only add to the history if it's new or different and not already in the list
-  if (currentText !== '' && !clipboardCopiedItems.includes(currentText)) {
-    clipboardCopiedItems.unshift(currentText); // Add to the top of the list
-    updateClipboardList();
+  if (currentText && currentText !== lastText) {
+    lastText = currentText;
+    const newItem = {
+      id: Date.now(),
+      content: currentText,
+      timestamp: Date.now(),
+      isPinned: false
+    };
+    clipboardCopiedItems.unshift(newItem); // Add new item to the beginning of the array
+    // Initialize
+    loadItems(currentText)
+    renderItems()
   }
-}, 100);
+}, 100); // check every second
+
