@@ -1,6 +1,9 @@
 // Clipboard Manager Renderer Process
-const { clipboard } = require('electron');
-const clipboardy = require('clipboardy');
+const { clipboard, Tray } = require('electron');
+const path = require('path');
+// Create the Tray icon
+let tray;
+const { checkForUpdates } = require("./updateManager");
 
 // DOM Elements
 const menuButton = document.getElementById("menu-button")
@@ -22,6 +25,7 @@ const itemsContainer = document.getElementById("items-container")
 const pagination = document.getElementById("pagination")
 const prevPageBtn = document.getElementById("prev-page")
 const nextPageBtn = document.getElementById("next-page")
+const updateAppBtn = document.getElementById("update-app-btn")
 const pageInfo = document.getElementById("page-info")
 const itemTemplate = document.getElementById("item-template")
 const toastContainer = document.getElementById("toast-container")
@@ -188,14 +192,10 @@ function updatePagination(totalItems) {
 function handleCopyItem(id) {
   const item = clipboardCopiedItems.find((item) => item.id === id)
   if (item) {
-    navigator.clipboard
-      .writeText(item.content)
-      .then(() => {
-        showToast("Copied to clipboard", item.content)
-      })
-      .catch((err) => {
-        console.error("Could not copy text: ", err)
-      })
+    clipboard.writeText(item?.content);
+    showToast("Copied to clipboard", item?.content)
+  }else {
+    showToast("Error", "Item not found")
   }
 }
 
@@ -264,10 +264,15 @@ function showToast(title, content) {
   }, 2000)
 }
 
+
 // Event listeners
 menuButton.addEventListener("click", toggleDrawer)
 closeDrawerButton.addEventListener("click", closeDrawer)
-drawerOverlay.addEventListener("click", closeDrawer)
+drawerOverlay.addEventListener("click", closeDrawer);
+updateAppBtn.addEventListener("click", () => {
+    tray = new Tray(path.join(__dirname, 'assets/icons/copy_list.png')); // Use a transparent PNG for macOS
+    checkForUpdates(tray)
+})
 
 allItemsBtn.addEventListener("click", () => {
   setActiveTab("all")

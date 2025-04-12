@@ -5,7 +5,7 @@ const { exec } = require("child_process");
 
 const GITHUB_OWNER = "kabir-coderex";
 const GITHUB_REPO = "CopyList";
-const CURRENT_VERSION = app.getVersion();
+const CURRENT_VERSION = app?.getVersion() || "1.0.0"; // Default version if app is not defined
 
 async function getLatestRelease() {
   return new Promise((resolve, reject) => {
