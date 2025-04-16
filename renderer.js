@@ -4,6 +4,8 @@ const path = require('path');
 // Create the Tray icon
 let tray;
 const { checkForUpdates } = require("./updateManager");
+const { pinItem, unpinItem, deletePinnedItem, getPinnedItems } = require('./pinManager');
+
 
 // DOM Elements
 const menuButton = document.getElementById("menu-button")
@@ -37,6 +39,7 @@ let isPaginationEnabled = true
 let currentPage = 1
 const itemsPerPage = 6
 let currentTheme = localStorage.getItem("theme") || "light"
+const pinnedList = getPinnedItems();
 
 // Initialize theme
 setTheme(currentTheme)
@@ -151,7 +154,7 @@ function renderItems() {
 
     // Add event listeners
     itemElement.querySelector(".copy-btn").addEventListener("click", () => handleCopyItem(item.id))
-    itemElement.querySelector(".pin-btn").addEventListener("click", () => handleTogglePin(item.id))
+    itemElement.querySelector(".pin-btn").addEventListener("click", () => handleTogglePin(item))
     itemElement.querySelector(".delete-btn").addEventListener("click", () => handleDeleteItem(item.id))
 
     // Add keyboard event listener
@@ -200,10 +203,17 @@ function handleCopyItem(id) {
 }
 
 // Handle toggle pin
-function handleTogglePin(id) {
+function handleTogglePin(item) {
+  const id = item.id;
   clipboardCopiedItems = clipboardCopiedItems.map((item) => (item.id === id ? { ...item, isPinned: !item.isPinned } : item))
   saveItems()
   renderItems()
+
+  if(item.isPinned) {
+    unpinItem(item.id);
+  }else {
+    pinItem(item);
+  }
 }
 
 // Handle delete item
@@ -308,7 +318,7 @@ prevPageBtn.addEventListener("click", () => {
 })
 
 nextPageBtn.addEventListener("click", () => {
-  const filteredItems = activeTab === "all" ? clipboardCopiedItems : clipboardCopiedItems.filter((item) => item.isPinned)
+  const filteredItems = activeTab === "all" ? clipboardCopiedItems : pinnedList
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
 
   if (currentPage < totalPages) {
