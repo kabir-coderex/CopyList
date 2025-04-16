@@ -4,7 +4,7 @@ const path = require('path');
 // Create the Tray icon
 let tray;
 const { checkForUpdates } = require("./updateManager");
-const { pinItem, unpinItem, deletePinnedItem, getPinnedItems } = require('./pinManager');
+const { pinItem, unpinItem, deletePinnedItem, getPinnedItems, clearAllPinnedItems } = require('./pinManager');
 
 
 // DOM Elements
@@ -133,7 +133,7 @@ function renderItems() {
   itemsContainer.innerHTML = ""
 
   // Filter items based on active tab
-  const filteredItems = activeTab === "all" ? clipboardCopiedItems : clipboardCopiedItems.filter((item) => item.isPinned)
+  const filteredItems = activeTab === "all" ? clipboardCopiedItems : pinnedList
 
   // Apply pagination if enabled
   const paginatedItems = isPaginationEnabled
@@ -206,11 +206,13 @@ function handleCopyItem(id) {
 function handleTogglePin(item) {
   const id = item.id;
   clipboardCopiedItems = clipboardCopiedItems.map((item) => (item.id === id ? { ...item, isPinned: !item.isPinned } : item))
-  saveItems()
-  renderItems()
 
-  if(item.isPinned) {
+  if(item.isPinned || activeTab !== "all") {
     unpinItem(item.id);
+    deletePinnedItem(id);
+    if(activeTab !== "all") {
+      renderItems();
+    }
   }else {
     pinItem(item);
   }
@@ -221,9 +223,14 @@ function handleDeleteItem(id) {
   const item = clipboardCopiedItems.find((item) => item.id === id)
   if (item && !item.isPinned) {
     clipboardCopiedItems = clipboardCopiedItems.filter((item) => item.id !== id)
-    saveItems()
-    renderItems()
   }
+
+  if(activeTab !== "all") {
+    deletePinnedItem(id);
+  }
+
+  saveItems()
+  renderItems()
 }
 
 // Handle clear clipboard
@@ -237,6 +244,7 @@ function handleClearClipboard() {
 // Handle clear pinned items
 function handleClearPinnedItems() {
   clipboardCopiedItems = clipboardCopiedItems.filter((item) => !item.isPinned)
+  clearAllPinnedItems();
   saveItems()
   renderItems()
   closeDrawer()
@@ -320,6 +328,9 @@ prevPageBtn.addEventListener("click", () => {
 nextPageBtn.addEventListener("click", () => {
   const filteredItems = activeTab === "all" ? clipboardCopiedItems : pinnedList
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
+
+
+  console.log(activeTab, clipboardCopiedItems, pinnedList)
 
   if (currentPage < totalPages) {
     currentPage++

@@ -77,10 +77,23 @@ function getPinnedItems() {
   return loadPinnedItems();
 }
 
+/**
+ * Clear all pinned items by overwriting the file with an empty array.
+ */
+function clearAllPinnedItems() {
+    try {
+      savePinnedItems([]);
+      console.log('All pinned items cleared.');
+    } catch (error) {
+      console.error('Error clearing pinned items:', error);
+    }
+}
+
 // Exporting the functions to be used elsewhere
 module.exports = {
   pinItem,
   unpinItem,
   deletePinnedItem,
   getPinnedItems,
+  clearAllPinnedItems,
 };
