@@ -39,7 +39,6 @@ let isPaginationEnabled = true
 let currentPage = 1
 const itemsPerPage = 6
 let currentTheme = localStorage.getItem("theme") || "light"
-const pinnedList = getPinnedItems();
 
 // Initialize theme
 setTheme(currentTheme)
@@ -133,7 +132,7 @@ function renderItems() {
   itemsContainer.innerHTML = ""
 
   // Filter items based on active tab
-  const filteredItems = activeTab === "all" ? clipboardCopiedItems : pinnedList
+  const filteredItems = activeTab === "all" ? clipboardCopiedItems : getPinnedItems()
 
   // Apply pagination if enabled
   const paginatedItems = isPaginationEnabled
@@ -206,7 +205,8 @@ function handleCopyItem(id) {
 function handleTogglePin(item) {
   const id = item.id;
   clipboardCopiedItems = clipboardCopiedItems.map((item) => (item.id === id ? { ...item, isPinned: !item.isPinned } : item))
-
+  document.querySelector(`[data-id="${id}"]`).setAttribute("data-pinned", !item.isPinned)
+  
   if(item.isPinned || activeTab !== "all") {
     unpinItem(item.id);
     deletePinnedItem(id);
@@ -326,11 +326,11 @@ prevPageBtn.addEventListener("click", () => {
 })
 
 nextPageBtn.addEventListener("click", () => {
-  const filteredItems = activeTab === "all" ? clipboardCopiedItems : pinnedList
+  const filteredItems = activeTab === "all" ? clipboardCopiedItems : getPinnedItems()
   const totalPages = Math.ceil(filteredItems.length / itemsPerPage)
 
 
-  console.log(activeTab, clipboardCopiedItems, pinnedList)
+  console.log(activeTab, clipboardCopiedItems, getPinnedItems())
 
   if (currentPage < totalPages) {
     currentPage++
